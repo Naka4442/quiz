@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/profil.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <div></div>
+        {% if user %}
+        <h1>{{user.name}}</h1>
+        {% endif %}
+        <div><a href="{% url 'logout' %}">Выйти</a></div>
+    </header>
+    <main>
+        <h2>Мои викторины</h2>
+        <section class="quizes">
+            {% for quiz in quizes %}
+            <div class="quiz">
+                <img src="{{quiz.image.url}}" alt="">
+                <h3>{{quiz.title}}</h3>
+                <div class="quiz-buttons">
+                    <a href="{% url 'quiz' quiz.id %}">
+                        <img src="{% static 'icons/icon-pass.png' %}" alt="">
+                    </a>
+                    <a href="{% url 'add_questions' quiz.id %}">
+                        <img src="{% static 'icons/icon-pencil.png' %}" alt="">
+                    </a>
+                    <a href="{% url 'delete_quiz' quiz.id %}">
+                        <img src="{% static 'icons/icon-delete.png' %}" alt=""> 
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+        <a href="../quizadd/" id="quiz-add">+</a>
+    </main>
+    <script src="{% static 'js/quiz.js' %}"></script>
+</body>
+</html>

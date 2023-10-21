@@ -1,0 +1,16 @@
+*{
+    color: red;
+}
+h1{
+    font-size: 100px;
+    font-weight: 400;
+    color: rgb(12, 0, 72);
+    font-style: italic;
+    background-color: rgb(180, 180, 180);
+}
+li{
+    font-size: 20px;
+    font-weight: 400;
+    color: rgb(153, 7, 7);
+    font-style: italic;
+}

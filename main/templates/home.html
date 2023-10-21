@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <div></div>
+        <h1>Главная страница</h1>
+        {% if user %}
+        <div class="profile"><a href="{% url 'profile'%}">{{user.name}}</a></div>
+        {% else %}
+        <div><a href="{% url 'signin' %}">Войти</a></div>
+        {% endif %}
+    </header>
+    <main>
+        {% if not user %}
+        <div class="warning">
+            <h2>Для прохождения викторин Вам необходимо <a href="{% url 'signin' %}">войти</a></h2>
+        </div>
+        {% endif %}
+        <div class="quizes">
+            {% for quiz in quizes %}
+            <div class="quiz">
+                <img src="{{quiz.image.url}}" alt="">
+                <h3>{{quiz.title}}</h3>
+                {% if user %}
+                <div class="buttons">
+                    <a href="{% url 'quiz' quiz.id %}">Пройти!</a>
+                    <a href="{% url 'rating' quiz.id %}">Рейтинг</a>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
