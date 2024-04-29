@@ -18,9 +18,18 @@ class Quiz(models.Model):
         return self.title
 
 class Question(models.Model):
+    WITH_VARIANTS = 'WV'
+    TEXT_FILL = 'TF'
+
+    KIND_CHOICES = (
+        (WITH_VARIANTS, 'С вариантами ответа'),
+        (TEXT_FILL, 'Поле ввода'),
+    )
     title = models.TextField()
     order = models.IntegerField()
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    correct = models.CharField(max_length = 50, null = True, default= None)
+    kind = models.CharField(max_length = 2, choices = KIND_CHOICES, default = WITH_VARIANTS)
     def __str__(self) -> str:
         return self.title
 

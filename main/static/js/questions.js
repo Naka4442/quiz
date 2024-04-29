@@ -5,12 +5,17 @@ document.querySelector(".add-question").addEventListener("click", e => {
     `<div class="question">
         <p>
             <input type="text" placeholder="Текст вопроса" class="question-title">
+            <select class="question-kind">
+                <option value="WV" selected>С вариантами ответа</option>
+                <option value="TF">Поле ввода</option>
+            </select>
             <button class="end-adding">✓</button>
         </p>
     </div>`);
     document.querySelectorAll(".end-adding").forEach(el => el.addEventListener("click", e => {
         let title = e.target.parentElement.querySelector(".question-title").value;
-        addQuestion(title).then(data => {
+        let kind =  e.target.parentElement.querySelector(".question-kind").value;
+        addQuestion(title, kind).then(data => {
             if(data){
                 alert("Вопрос добавлен");
                 window.location.reload();
@@ -80,6 +85,21 @@ document.querySelectorAll(".add-answer").forEach(el => el.addEventListener("clic
     }
 }))
 
+document.querySelectorAll(".end-adding-correct").forEach(el => el.addEventListener("click", (e) => {
+    let title = e.target.parentElement.querySelector(".adding-correct").value;
+    let question = e.target.parentElement.parentElement.querySelector(".qid").value;
+    console.log(title, question);
+    addAnswer(title, question).then(data => {
+        if(data){
+            alert("Ответ добавлен");
+            window.location.reload();
+        }
+        else{
+            alert("Ошибка")
+        }
+    })
+}))
+
 document.querySelectorAll(".qdelete").forEach(el => el.addEventListener("click", (e) => {
     let question = e.target.parentElement.parentElement.querySelector(".qid").value;
     console.log(question);
@@ -96,9 +116,9 @@ document.querySelectorAll(".qdelete").forEach(el => el.addEventListener("click",
 
 document.querySelectorAll(".andelete").forEach(el => el.addEventListener("click", (e) => {
     let aid = Number(e.target.parentElement.querySelector(".aid").value);
-    deleteAnswer(aid).then(data => {
+    deleteAnswer(aid, "WV").then(data => {
         if(data){
-            alert("Вопрос удален");
+            alert("Ответ удален");
             window.location.reload();
         }
         else{
@@ -107,11 +127,24 @@ document.querySelectorAll(".andelete").forEach(el => el.addEventListener("click"
     })
 }))
 
-async function addQuestion(title){
+document.querySelectorAll(".text-delete").forEach(el => el.addEventListener("click", (e) => {
+    let qid = Number(e.target.parentElement.parentElement.querySelector(".qid").value);
+    deleteAnswer(qid, "TF").then(data => {
+        if(data){
+            alert("Ответ удален");
+            window.location.reload();
+        }
+        else{
+            alert("Ошибка")
+        }
+    })
+}))
+
+async function addQuestion(title, kind){
     const csrftoken = document.querySelector("input[name=csrfmiddlewaretoken]").value;
     let request = await fetch("", {
         method : "POST",
-        body : JSON.stringify({title}),
+        body : JSON.stringify({title, kind}),
         headers: { "X-CSRFToken": csrftoken }
     })
     let result = await request.json();
@@ -151,11 +184,11 @@ async function  deleteQuestion(id){
     return result.result;
 }
 
-async function  deleteAnswer(id){
+async function  deleteAnswer(id, mode){
     const csrftoken = document.querySelector("input[name=csrfmiddlewaretoken]").value;
     let request = await fetch("../../delete_answer/", {
         method : "POST",
-        body : JSON.stringify({id}),
+        body : JSON.stringify({id, mode}),
         headers: { "X-CSRFToken": csrftoken }
     })
     let result = await request.json();

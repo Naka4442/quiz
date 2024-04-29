@@ -25,7 +25,7 @@
                 <div class="question">
                     <input type="hidden" value="{{question.id}}" class="qid">
                     <p class = "question-delete"><span class ="qtitle">{{question.title}}</span><span class ="qdelete">×</span></p>
-                    
+                    {% if question.kind == "WV" %}
                     <ul>
                         {% for answer in question.answers %}
                             {% if answer.correct %}
@@ -44,6 +44,17 @@
                         <li class="add-answer">+</li>
                         {% endif %}
                     </ul>
+                    {% elif question.kind == "TF" %}
+                    <div class="add-correct-answer">
+                        {% if question.correct %}
+                            <input type="hidden" value="{{question.id}}" class="qid">
+                            <p class="text-answer">{{ question.correct }}<span class ="text-delete">×</span></p>
+                        {% else %}
+                            <input type="text" class="adding-correct">
+                            <button class="end-adding-correct">✓</button>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>

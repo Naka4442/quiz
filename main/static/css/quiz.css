@@ -102,3 +102,15 @@ main{
 .selected{
     background-color: #91e58e;
 }
+
+.tf {
+    width: 500px;
+    height: 50px;
+    box-shadow: 0 0 10px black;
+    border-radius: 20px;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}

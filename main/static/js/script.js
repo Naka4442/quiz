@@ -23,13 +23,19 @@ let answers = [];
 let quiz_id = Number(document.querySelector("#id").innerText);
 let score = 0;
 
-function nextQuestion(event){
-    let corrects = questions[current].answers
-        .map((ans, i) => (ans.correct) ? i : null)
-        .filter(ans => ans != null).sort();
-    console.log(corrects, answers.sort());
-    if(corrects.toString() === answers.sort().toString()){
-        score++;
+function nextQuestion(){
+    if(questions[current].kind == "TF"){
+        let correct = questions[current].correct;
+        if(correct === answers) score++;
+    }
+    else if(questions[current].kind == "WV"){
+        let corrects = questions[current].answers
+            .map((ans, i) => (ans.correct) ? i : null)
+            .filter(ans => ans != null).sort();
+        console.log(corrects, answers.sort());
+        if(corrects.toString() === answers.sort().toString() ){
+            score++;
+        }
     }
     console.log(`Счёт ${score}`)
     current++;
@@ -43,13 +49,19 @@ function nextQuestion(event){
 }
 
 function answerQuestion(e){
-    e.target.classList.toggle("selected");
-    let answer = Number(e.target.id.match(/\d+/));
-    if(e.target.classList.contains("selected")){
-        answers.push(answer);
+    if(questions[current].kind = "TF"){
+        let answer = document.querySelector(".tf").value;
+        answers = answer;
     }
-    else{
-        answers.splice(answers.indexOf(answer), 1);
+    else if(questions[current].kind = "WV"){
+        e.target.classList.toggle("selected");
+        let answer = Number(e.target.id.match(/\d+/));
+        if(e.target.classList.contains("selected")){
+            answers.push(answer);
+        }
+        else{
+            answers.splice(answers.indexOf(answer), 1);
+        }
     }
 }
 
@@ -61,11 +73,17 @@ function renderResult(){
 
 function renderQuestion(){
     document.querySelector(".title").innerText = questions[current].text;
-    let answers = questions[current].answers.map((answer, i) => `<button class="answer" id="answer${i}">${answer.text}</button>`).join("\n");
-    document.querySelector(".answers").innerHTML = answers;
-    document.querySelectorAll(".answer").forEach(el => {
-        el.addEventListener("click", answerQuestion)
-    })
+    if(questions[current].kind === "TF"){
+        document.querySelector(".answers").innerHTML = `<input type="text" placeholder="Ответ" class="tf">`;
+        document.querySelector(".tf").addEventListener("input", answerQuestion);
+    }
+    else if(questions[current].kind === "WV"){
+        let answers = questions[current].answers.map((answer, i) => `<button class="answer" id="answer${i}">${answer.text}</button>`).join("\n");
+        document.querySelector(".answers").innerHTML = answers;
+        document.querySelectorAll(".answer").forEach(el => {
+            el.addEventListener("click", answerQuestion)
+        })
+    }
 }
 
 document.querySelector(".next").addEventListener("click", nextQuestion);

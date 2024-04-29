@@ -142,3 +142,56 @@ main{
     display: flex;
     justify-content: space-between;
 }
+
+.question-kind {
+    font-weight: 500;
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #e1f2ff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.548);
+    border-radius: 10px;
+    height: 40px;
+    width: 500px;
+    outline: none;
+}
+
+.adding-correct {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #e1f2ff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.548);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    height: 40px;
+    width: 500px;
+    outline: none;
+}
+
+.end-adding-correct {
+    width:  40px;
+    height: 40px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.548);
+    outline: none;
+    border: none;
+    font-size: 15px;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #59b6ff;
+    font-weight: 500;
+}
+
+.add-correct-answer {
+    display: flex;
+}
+
+.text-answer {
+    width: 500px;
+    height: 50px;
+    background-color: #59b6ff;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 0 5px black;
+}

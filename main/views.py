@@ -15,6 +15,8 @@ def questions(request, id):
     questions = Question.objects.filter(quiz=quiz)
     result = [{
         "text" : question.title,
+        "kind" : question.kind,
+        "correct" : question.correct,
         "answers" : [
             {
                 "text" : answer.text,
@@ -103,6 +105,8 @@ def add_questions(request, id):
         questions = [{
             "id" : question.id,
             "title" : question.title,
+            "kind" : question.kind,
+            "correct" : question.correct,
             "answers" : [
                 {
                     "id" : answer.id,
@@ -121,9 +125,11 @@ def add_questions(request, id):
         order = questions.last().order if len(questions) > 0 else 1
         question = Question()
         title = data.get("title")
+        kind = data.get("kind")
         if len(title) == 0:
             return HttpResponse(json.dumps({"result" : False}))
-        question.title = data.get("title")
+        question.title = title
+        question.kind = kind
         question.order = order
         question.quiz = quiz
         question.save()
@@ -132,15 +138,20 @@ def add_questions(request, id):
 def add_answer(request, id):
     data = json.loads(request.body)
     question = Question.objects.get(id=id)
-    answer = Answer()
-    answer.question = question
     title = data.get("title")
     if len(title) == 0:
         return HttpResponse(json.dumps({"result" : False}))
-    answer.text = title
-    answer.correct = False
-    answer.save()
-    return HttpResponse(json.dumps({"result" : True}))
+    if question.kind == "TF":
+        question.correct = title
+        question.save()
+        return HttpResponse(json.dumps({"result" : True}))
+    else:
+        answer = Answer()
+        answer.question = question
+        answer.text = title
+        answer.correct = False
+        answer.save()
+        return HttpResponse(json.dumps({"result" : True}))
 
 def correct_answer (request):
     data = json.loads(request.body)
@@ -217,7 +228,14 @@ def rating(request, id):
 
 def delete_answer (request):
     data = json.loads(request.body)
-    answer = Answer.objects.get(id=data.get("id"))
-    answer.delete()
-    return HttpResponse(json.dumps({"result" : True}))
+    mode = data.get("mode")
+    if mode == "TF":
+        question = Question.objects.get(id=data.get("id"))
+        question.correct = None
+        question.save()
+        return HttpResponse(json.dumps({"result" : True}))
+    elif mode == "WV":
+        answer = Answer.objects.get(id=data.get("id"))
+        answer.delete()
+        return HttpResponse(json.dumps({"result" : True}))
 
