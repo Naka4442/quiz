@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <title>Document</title>
+    <title>Главная</title>
 </head>
 <body>
     <header>
@@ -24,6 +24,21 @@
             <h2>Для прохождения викторин Вам необходимо <a href="{% url 'signin' %}">войти</a></h2>
         </div>
         {% endif %}
+        <div class="neuro-quiz">
+            <div class="quiz">
+                <img src="{% static 'icons/icon-neuro.png' %}" alt="">
+                <h3>Нейро-викторина</h3>
+                {% if user %}
+                <div class="neuro-controls">
+                    <input type="text" placeholder="Тема" id="neuro-title">
+                    <input type="number" placeholder="Вопросы" min="2" max="20" id="neuro-count">
+                </div>
+                <div class="buttons">
+                    <a href="{% url 'quiz' 0 %}">Пройти!</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
         <div class="quizes">
             {% for quiz in quizes %}
             <div class="quiz">

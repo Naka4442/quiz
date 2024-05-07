@@ -46,7 +46,20 @@ main{
     align-items: center;
     gap: 20px;
 }
-
+#neuro-title, #neuro-count{
+    border-radius: 5px;
+    border: 2px solid #a5d8ff;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    height: 30px;
+    padding-left: 10px;
+}
+#neuro-title{
+    width: 400px;
+}
+#neuro-count{
+    width: 100px;
+}
 .answer{
     width: 150px;
     height: 30px;

@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/quiz.css' %}">
+    <title>Нейро-викторина</title>
+</head>
+<body>
+    <header>
+        <div><a href="{% url 'home' %}">На главную</a></div>
+        <h1>Нейро-викторина</h1>
+        {% if user %}
+        <div class="profile"><a href="{% url 'profile'%}">{{user.name}}</a></div>
+        {% else %}
+        <div><a href="{% url 'signin' %}">Войти</a></div>
+        {% endif %}
+    </header>
+    <main>
+        <div class="question">
+            <h3 class="title"></h3>
+            <div class="answers">
+                <div class="neuro-info">
+                    <input type="text" placeholder="Тема" id="neuro-title">
+                    <input type="number" placeholder="Вопросы" min="2" max="20" id="neuro-count">
+                </div>
+            </div>
+            <button class="next">Вперед</button>
+        </div>
+    </main>
+    {% csrf_token %}
+    <script src="{% static 'js/neuro.js' %}"></script>
+</body>
+</html>

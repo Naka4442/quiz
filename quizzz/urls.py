@@ -23,7 +23,9 @@ from main import views as main
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('quiz/<int:id>', main.quiz, name="quiz"),
+    path('neuro_quiz', main.neuro_quiz, name="neuro_quiz"),
     path('questions/<int:id>', main.questions),
+    path('neuro/<str:theme>', main.neuro_question),
     path('signin/', main.signin, name="signin"),
     path('signup/', main.signup, name="signup"),
     path('quizadd/', main.quizadd),

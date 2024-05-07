@@ -2,13 +2,24 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Quiz, Question, Answer, User, QuizResult
 from .forms import Signupform, Signinform, Quizform
+from .gpt import get_question
+from random import randint
 
 import json
 # Create your views here.
-def quiz(request,id):
+def quiz(request, id):
     user = request.session.get("user", False)
     quiz = Quiz.objects.get(id=id)
     return render(request, "quiz.html",{"quiz":quiz, "user":user})
+
+def neuro_quiz(request):
+    user = request.session.get("user", False)
+    return render(request, "neuro-quiz.html",{"user":user})
+
+def neuro_question(request, theme):
+    question = get_question(theme, randint(2, 4))
+    print(question)
+    return HttpResponse(question, content_type="application/json")
 
 def questions(request, id):
     quiz = Quiz.objects.get(id=id)

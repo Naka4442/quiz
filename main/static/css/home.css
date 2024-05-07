@@ -21,6 +21,12 @@ main{
     flex-direction : column;
     align-items : center;
 }
+.neuro-quiz{
+    margin-bottom: 20px;
+}
+.neuro-quiz h3{
+    margin: 5px;
+}
 .quizes{
     display: flex;
     justify-content: center;
@@ -31,12 +37,24 @@ main{
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     border-radius: 10px;
     width: 200px;   
-    height: 200px;
+    height: 250px;
     background-color: #59b6ff;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+.neuro-controls{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 5px;
+}
+.neuro-controls>input{
+    border-radius: 5px;
+    border: 2px solid #a5d8ff;
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
 }
 .quiz>h3{
     font-size: 16px;

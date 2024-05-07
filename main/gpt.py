@@ -1,43 +1,51 @@
-# from openai import OpenAI
+import requests, os, json
+from dotenv import load_dotenv
 
 
-# API_TOKEN = 'sk-utr8kuqsVUgBqbvw525d4f9aE6984f6eAdD6D62b828eBeCd'
-# BASE_URL = 'https://neuroapi.host'
-# client = OpenAI(api_key=API_TOKEN,)
+load_dotenv()
+BASE_KEY = os.getenv('BASE_KEY')
+API_KEY = os.getenv('API_KEY')
 
-# completion = client.chat.completions.create(
-#   model="ChatGPT-3.5-Turbo",
-#   messages=[
-#     {"role": "system", "content": "Ты волшебник, который придумывает загадки детям 6-8 лет"},
-#     {"role": "user", "content": "Сочини 3 загадки в формате json"}
-#   ]
-# )
+def get_question(theme, ans_count):
+    
+    prompt = {
+        "modelUri": f"gpt://{BASE_KEY}/yandexgpt/latest",
+        "completionOptions": {
+            "stream": False,
+            "temperature": 0.3,
+            "maxTokens": "2000"
+        },
+        "messages": [
+            {
+                "role": "system",
+                "text": "Ты помощник учителя. Ты должен вопросы в формате json на любую тему. Пример вопроса в json: \"{\"text\" : \"текст вопроса\", \"answers\" : [{\"text\" : \"текст ответа 1\", \"correct\" : true}, {\"text\" : \"текст ответа 2\", \"correct\" : false}]}\". В правильном ответе \"correct\" должен быть true. Максимум ответов - 4. Правильных ответов может быть несколько. Писать что-то помимо самого json не нужно."
+            },
+            {
+                "role": "user",
+                "text": "Придумай вопрос с 4 ответами по математике за 6 класс"
+            },
+            {
+                "role": "assistant",
+                "text": "\"{\"text\" : \"Укажите лишнюю пару слов\", \"answers\" : [{\"text\" : \"картина - рисовать\", \"correct\" : true}, {\"text\" : \"продавец - продавать\", \"correct\" : false}, {\"text\" : \"врач - лечить\", \"correct\" : false}, {\"text\" : \"учитель - учить\", \"correct\" : false}]}\""
+            },
+            {
+                "role": "user",
+                "text": f"Придумай вопрос с {ans_count} ответами по теме \"{theme}\""
+            },
+        ]
+    }
 
-# print(completion.choices[0].message)
 
-import openai # openai==0.28
+    url = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Api-Key {API_KEY}"
+    }
 
-openai.api_key = "sk-OdfItJ3AHERxqNhAAdB8914917Dc4d608aD476E9259aBf2e" # Ваш API ключ
-openai.api_base = "https://eu.neuroapi.host/v1" # Наш API Endpoint
-
-
-def main():
-    chat_completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": "write a poem about a tree"}],
-        stream=True,
-    )
-
-    if isinstance(chat_completion, dict):
-        # not stream
-        print(chat_completion.choices[0].message.content)
-    else:
-        # stream
-        for token in chat_completion:
-            content = token["choices"][0]["delta"].get("content")
-            if content != None:
-                print(content, end="", flush=True)
+    response = requests.post(url, headers=headers, json=prompt)
+    result = json.loads(response.text).get("result").get("alternatives")[0].get("message").get("text")
+    return result
 
 
 if __name__ == "__main__":
-    main()
+    print(get_question("информатика 8 класс", 4))
