@@ -46,6 +46,16 @@ main{
     align-items: center;
     gap: 20px;
 }
+.neuro-info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.neuro-info>h3{
+    text-align: center;
+    font-size: 22px;
+}
 #neuro-title, #neuro-count{
     border-radius: 5px;
     border: 2px solid #a5d8ff;

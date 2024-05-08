@@ -29,12 +29,8 @@
                 <img src="{% static 'icons/icon-neuro.png' %}" alt="">
                 <h3>Нейро-викторина</h3>
                 {% if user %}
-                <div class="neuro-controls">
-                    <input type="text" placeholder="Тема" id="neuro-title">
-                    <input type="number" placeholder="Вопросы" min="2" max="20" id="neuro-count">
-                </div>
                 <div class="buttons">
-                    <a href="{% url 'quiz' 0 %}">Пройти!</a>
+                    <a href="{% url 'neuro_quiz' %}">Пройти!</a>
                 </div>
                 {% endif %}
             </div>
