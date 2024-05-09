@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Quiz, Question, Answer, User, QuizResult
 from .forms import Signupform, Signinform, Quizform
-from .gpt import get_question
+from .gpt import get_question, clear_history
 from random import randint
 
 import json
@@ -14,6 +14,7 @@ def quiz(request, id):
 
 def neuro_quiz(request):
     user = request.session.get("user", False)
+    clear_history()
     return render(request, "neuro-quiz.html",{"user":user})
 
 def neuro_question(request, theme):

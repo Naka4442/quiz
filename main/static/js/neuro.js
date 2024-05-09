@@ -5,8 +5,19 @@ let score = 0;
 
 async function getQuestion(theme){
     let res = await fetch(`/neuro/${theme}`);
-    let result = await res.json();
-    return result;
+    if(res.ok){
+        let result;
+        try{
+            result = await res.json();
+        }
+        catch{
+            alert("Неудачный ответ нейросети... Генерирую заново");
+            return false;
+        }
+        return result;
+    }
+    alert("Неудачный ответ нейросети... Генерирую заново");
+    return false;
 }
 
 function renderResult(){
@@ -22,30 +33,40 @@ function nextQuestion(){
             questionsCount = Number(nCount);
             theme = nTitle;
             console.log("Вход", nTitle, nCount);
-            current++;
             getQuestion(nTitle).then((data) => {
-                question = data;
-                renderQuestion(data);
+                if(data){
+                    current++;
+                    question = data;
+                    renderQuestion(data);
+                }
+                else{
+                    nextQuestion()
+                }
             })
         }
     }
     else if(current <= questionsCount){
-        current++;
         let corrects = question.answers
-            .map((ans, i) => (ans.correct) ? i : null)
-            .filter(ans => ans != null).sort();
+        .map((ans, i) => (ans.correct) ? i : null)
+        .filter(ans => ans != null).sort();
         console.log(corrects, answers.sort());
         if(corrects.toString() === answers.sort().toString() ){
             score++;
         }
         answers = [];
-        if(current > questionsCount){
+        if(current >= questionsCount){
             renderResult();
         }
         else{
             getQuestion(theme).then((data) => {
-                question = data;
-                renderQuestion(data);
+                if(data){
+                    current++;
+                    question = data;
+                    renderQuestion(data);
+                }
+                else{
+                    nextQuestion()
+                }
             })
         }
     }
